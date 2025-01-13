@@ -52686,13 +52686,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   health: 0
-  armor: 0
-  maxHealth: 100
-  maxArmor: 50
+  defense: 0
+  maxHealth: 500
+  maxDefense: 30
   chipSpeed: 2
   frontHealthBar: {fileID: 2117647111}
   backHealthBar: {fileID: 1760657038}
-  armorBar: {fileID: 0}
   DamagaOverlay: {fileID: 1728697970}
   duration: 1
   fadeSpeed: 0.5
@@ -66174,15 +66173,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 157113591786253251, guid: 9ab0031e2e9e36b4091c7c84cb83b7f2, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -463
+      value: -297
       objectReference: {fileID: 0}
     - target: {fileID: 157113591786253251, guid: 9ab0031e2e9e36b4091c7c84cb83b7f2, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 257.80145
+      value: 240
       objectReference: {fileID: 0}
     - target: {fileID: 157113591786253251, guid: 9ab0031e2e9e36b4091c7c84cb83b7f2, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 328
+      value: 248
       objectReference: {fileID: 0}
     - target: {fileID: 157113591786253251, guid: 9ab0031e2e9e36b4091c7c84cb83b7f2, type: 3}
       propertyPath: m_LocalRotation.w
@@ -66997,8 +66996,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   projectilePrefab: {fileID: 3770253103762244369, guid: c5bddecfb54481d4ebb65788e8916f6e, type: 3}
   projectileSpeed: 100
-  shootCooldown: 5
-  projectileInterval: 5
+  shootCooldown: 4.75
+  projectileInterval: 0
   numberOfProjectiles: 5
   projectileDamage: 5
   playerLayer:
