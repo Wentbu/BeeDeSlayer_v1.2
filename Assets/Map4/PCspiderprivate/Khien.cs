@@ -1,59 +1,60 @@
 ﻿using System.Collections;
 using UnityEngine;
 
-public class FollowEnemy : MonoBehaviour
+public class Khien : MonoBehaviour
 {
-    [SerializeField] private string targetObjectName = "spiderpc:Mesh"; // Tên đối tượng mà đối tượng sẽ theo
-    [SerializeField] private Vector3 offset; // Khoảng cách giữa đối tượng và enemy
     [SerializeField] private float maxHealth = 100f; // Máu tối đa
-    private float currentHealth; // Máu hiện tại
-    private Transform target; // Biến để lưu trữ đối tượng mục tiêu
+    [SerializeField] private float currentHealth; // Máu hiện tại
+    private SphereCollider sphereCollider; // Collider của quái
+    private AudioSource audioSource; // AudioSource để phát âm thanh
+    [SerializeField] private AudioClip deathSound; // Tệp âm thanh khi chết
 
-    private void Start()
+    private void Awake()
     {
-        // Khởi tạo sức khỏe hiện tại
+        sphereCollider = GetComponent<SphereCollider>();
+        audioSource = GetComponent<AudioSource>(); // Lấy AudioSource
         currentHealth = maxHealth;
 
-        // Tìm đối tượng có tên là "PCspider"
-        GameObject targetObject = GameObject.Find(targetObjectName);
-        if (targetObject != null)
-        {
-            target = targetObject.transform; // Lưu trữ biến transform của đối tượng mục tiêu
-        }
-
-        // Bắt đầu coroutine để tự động trừ máu
-        StartCoroutine(DeductHealthOverTime(3f, 200f));
+        // Debug thông tin
+        Debug.Log("Current Health: " + currentHealth);
     }
 
-    private void Update()
+    private void OnCollisionEnter(Collision collision)
     {
-        if (target != null)
+        // Kiểm tra nếu va chạm với đối tượng có layer "Bullet"
+        if (collision.gameObject.layer == LayerMask.NameToLayer("Bullet")) // Kiểm tra layer "Bullet"
         {
-            // Cập nhật vị trí của đối tượng để nó luôn theo sau đối tượng mục tiêu
-            transform.position = target.position + offset;
-        }
-
-        // Kiểm tra xem máu có bằng 0 không
-        if (currentHealth <= 0)
-        {
-            Destroy(gameObject); // Hủy đối tượng nếu máu về 0
+            TakeDamage(110f); // Nhận sát thương 110
         }
     }
 
-    // Phương thức để nhận sát thương
     public void TakeDamage(float damage)
     {
-        currentHealth -= damage; // Giảm máu hiện tại
-        if (currentHealth < 0)
+        currentHealth -= damage;
+        currentHealth = Mathf.Max(currentHealth, 0); // Đảm bảo máu không âm
+
+        Debug.Log("Damage Taken: " + damage + ", Current Health: " + currentHealth);
+
+        if (currentHealth <= 0f)
         {
-            currentHealth = 0; // Đảm bảo máu không âm
+            HandleDeath();
         }
     }
 
-    // Coroutine để trừ máu sau một thời gian
-    private IEnumerator DeductHealthOverTime(float delay, float damage)
+    private void HandleDeath()
     {
-        yield return new WaitForSeconds(delay);
-        TakeDamage(damage); // Gọi phương thức để trừ máu
+        sphereCollider.enabled = false; // Vô hiệu hóa collider
+
+        // Phát âm thanh khi chết
+        if (deathSound != null && audioSource != null)
+        {
+            audioSource.PlayOneShot(deathSound);
+        }
+
+        // Phá hủy đối tượng sau một khoảng thời gian để âm thanh có thể phát
+        Destroy(gameObject, 1f); // Thay đổi thời gian theo nhu cầu (1 giây trong ví dụ này)
+
+        // Debug thông tin
+        Debug.Log("Enemy has died and has been destroyed.");
     }
 }
